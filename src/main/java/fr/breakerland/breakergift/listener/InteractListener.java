@@ -44,7 +44,12 @@ public class InteractListener implements Listener {
 			return;
 
 		Player player = event.getPlayer();
-		if (event.getAction() == Action.RIGHT_CLICK_BLOCK && plugin.chests.contains(block.getLocation())) {
+		if (plugin.admins.remove(player.getUniqueId())) {
+			if (plugin.chests.remove(block.getLocation()))
+				player.sendMessage(plugin.getMessage("unlinkChest", "%prefix% &cChest successfully unlinked!"));
+			else if (plugin.chests.add(block.getLocation()))
+				player.sendMessage(plugin.getMessage("linkChest", "%prefix% &cChest successfully linked!"));
+		} else if (event.getAction() == Action.RIGHT_CLICK_BLOCK && plugin.chests.contains(block.getLocation())) {
 			if (plugin.isChristmas()) {
 				List<ItemStack> items = plugin.gifts.get(player.getUniqueId().toString());
 				if (items == null) {
@@ -63,11 +68,6 @@ public class InteractListener implements Listener {
 				}
 			} else
 				event.getPlayer().sendMessage(plugin.getMessage("notTime", "%prefix% &cIt's not time yet! You need to wait until &l%date%").replaceFirst("%date%", dateFormat));
-		} else if (plugin.admins.remove(player.getUniqueId())) {
-			if (plugin.chests.remove(block.getLocation()))
-				player.sendMessage(plugin.getMessage("unlinkChest", "%prefix% &cChest successfully unlinked!"));
-			else if (plugin.chests.add(block.getLocation()))
-				player.sendMessage(plugin.getMessage("linkChest", "%prefix% &cChest successfully linked!"));
 		} else
 			return;
 
