@@ -35,11 +35,11 @@ public class AdminGiftCommand implements CommandExecutor, TabCompleter {
 
 		if (args[0].equalsIgnoreCase("modify")) {
 			plugin.admins.add(player.getUniqueId());
-			player.sendMessage(plugin.getMessage("modifyMode", "&c&lLeft-click &con the chest that you want add or remove from gift chests."));
+			player.sendMessage(plugin.getMessage("modifyMode", "%prefix% &cClick on the chest that you want add or remove from gift chests."));
 		} else if (args[0].equalsIgnoreCase("giveall")) {
 			ItemStack item = player.getInventory().getItemInMainHand();
 			if (item.getType() == Material.AIR)
-				player.sendMessage(plugin.getMessage("noItem", "&cYou must have an item in your hand."));
+				player.sendMessage(plugin.getMessage("noItem", "%prefix% &cYou must have an item in your hand."));
 			else {
 				plugin.formatItem(item, "Staff");
 				Map<String, List<ItemStack>> newGifts = new HashMap<>();
@@ -51,9 +51,8 @@ public class AdminGiftCommand implements CommandExecutor, TabCompleter {
 					}
 
 				plugin.gifts = newGifts;
-
-				player.sendMessage(plugin.getMessage("sendGift", "&6You have sent a new gift to all players"));
-				Bukkit.broadcastMessage(plugin.getMessage("giveallGift", "&6You receive a new gift from the server staff!"));
+				player.sendMessage(plugin.getMessage("giveall", "%prefix% &6You have sent a new gift to all players."));
+				Bukkit.broadcastMessage(plugin.getMessage("receiveGiveall", "%prefix% &6You receive a new gift from the server staff!"));
 
 				player.getInventory().setItemInMainHand(new ItemStack(Material.AIR));
 			}

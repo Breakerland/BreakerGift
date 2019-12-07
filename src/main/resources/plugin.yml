@@ -1,7 +1,7 @@
 name: BreakerGift
 main: fr.breakerland.breakergift.BreakerGift
 api-version: 1.13
-version: 2.0
+version: 2.0.1
 description: Send a Christmas Gift !
 website: https://github.com/Breakerland
 authors: [AzodFR, LLIcocoman_Hrz]

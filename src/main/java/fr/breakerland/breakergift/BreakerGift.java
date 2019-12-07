@@ -66,7 +66,7 @@ public class BreakerGift extends JavaPlugin {
 	}
 
 	public String getMessage(String key, String def) {
-		return parseColors(getConfig().getString(key, def));
+		return parseColors(getConfig().getString(key, def).replaceFirst("%prefix%", "&f[&6Gift&f]"));
 	}
 
 	public Date getDate() {

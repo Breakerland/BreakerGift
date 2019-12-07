@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.UUID;
 
@@ -32,7 +33,7 @@ public class InteractListener implements Listener {
 	public InteractListener(BreakerGift plugin) {
 		this.plugin = plugin;
 
-		dateFormat = new SimpleDateFormat(plugin.getConfig().getString("dateFormat", "dd MMMM yyyy")).format(plugin.getDate());
+		dateFormat = new SimpleDateFormat(plugin.getConfig().getString("dateFormat", "dd MMMM yyyy"), Locale.getDefault()).format(plugin.getDate());
 		players = new HashSet<>();
 	}
 
@@ -45,7 +46,7 @@ public class InteractListener implements Listener {
 		Player player = event.getPlayer();
 		if (event.getAction() == Action.RIGHT_CLICK_BLOCK && plugin.chests.contains(block.getLocation())) {
 			if (plugin.isChristmas()) {
-				List<ItemStack> items = plugin.gifts.get(player.getUniqueId());
+				List<ItemStack> items = plugin.gifts.get(player.getUniqueId().toString());
 				if (items == null) {
 					items = plugin.gifts.get("all");
 					if (items != null)
@@ -53,20 +54,20 @@ public class InteractListener implements Listener {
 				}
 
 				if (items == null || ! (items.size() > 0))
-					player.sendMessage(plugin.getMessage("noGift", "&cYou don't have new gifts!"));
+					player.sendMessage(plugin.getMessage("noGift", "%prefix% &cYou don't have new gifts!"));
 				else {
-					Inventory inventory = Bukkit.createInventory(player, Math.min(6, (int) Math.ceil(items.size() / 9)) * 9, player.getName());
+					Inventory inventory = Bukkit.createInventory(player, Math.min(6, (int) Math.ceil(items.size() / 9D)) * 9, player.getName());
 					inventory.addItem(items.toArray(new ItemStack[items.size()]));
 					player.openInventory(inventory);
 					players.add(player.getUniqueId());
 				}
 			} else
-				event.getPlayer().sendMessage(plugin.getMessage("notTime", "&cIt's not time yet! You need to wait until &l%date%").replaceFirst("%date%", dateFormat));
+				event.getPlayer().sendMessage(plugin.getMessage("notTime", "%prefix% &cIt's not time yet! You need to wait until &l%date%").replaceFirst("%date%", dateFormat));
 		} else if (plugin.admins.remove(player.getUniqueId())) {
 			if (plugin.chests.remove(block.getLocation()))
-				player.sendMessage(plugin.getMessage("unlinkChest", "&cChest successfully unlinked!"));
+				player.sendMessage(plugin.getMessage("unlinkChest", "%prefix% &cChest successfully unlinked!"));
 			else if (plugin.chests.add(block.getLocation()))
-				player.sendMessage(plugin.getMessage("linkChest", "&cChest successfully linked!"));
+				player.sendMessage(plugin.getMessage("linkChest", "%prefix% &cChest successfully linked!"));
 		} else
 			return;
 
@@ -81,14 +82,14 @@ public class InteractListener implements Listener {
 	@EventHandler(ignoreCancelled = true)
 	public void OnPlayerClickInventory(InventoryClickEvent event) {
 		Player player = (Player) event.getWhoClicked();
-		if (!players.contains(player) || event.getCurrentItem().getType() == Material.AIR)
+		if (!players.contains(player.getUniqueId()))
 			return;
 
 		InventoryAction action = event.getAction();
 		if (event.getClickedInventory().getType() == InventoryType.PLAYER && action == InventoryAction.MOVE_TO_OTHER_INVENTORY || (event.getClickedInventory().getType() == InventoryType.CHEST || event.getClickedInventory().getType() == InventoryType.ENDER_CHEST) && (event.getAction() == InventoryAction.PLACE_ALL || event.getAction() == InventoryAction.PLACE_SOME || event.getAction() == InventoryAction.PLACE_ONE))
 			event.setCancelled(true);
 		else if (event.getClickedInventory().getType() != InventoryType.PLAYER && (action != InventoryAction.PICKUP_ALL || action != InventoryAction.MOVE_TO_OTHER_INVENTORY)) {
-			List<ItemStack> gifts = plugin.gifts.getOrDefault(player.getUniqueId(), new ArrayList<ItemStack>());
+			List<ItemStack> gifts = plugin.gifts.getOrDefault(player.getUniqueId().toString(), new ArrayList<ItemStack>());
 			if (gifts.remove(event.getCurrentItem()))
 				plugin.gifts.put(player.getUniqueId().toString(), gifts);
 		}
