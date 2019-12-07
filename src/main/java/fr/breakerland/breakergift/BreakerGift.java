@@ -122,9 +122,10 @@ public class BreakerGift extends JavaPlugin {
 		List<String> lores = new ArrayList<>();
 		List<String> newLores = getConfig().getStringList("itemLores");
 		for (String lore : newLores)
-			if (lore.equalsIgnoreCase("%lores%"))
-				lores.addAll(meta.getLore());
-			else
+			if (lore.equalsIgnoreCase("%lores%")) {
+				if (meta.hasLore())
+					lores.addAll(meta.getLore());
+			} else
 				lores.add(parseColors(lore.replaceFirst("%player%", sender)));
 
 		meta.setLore(lores);
