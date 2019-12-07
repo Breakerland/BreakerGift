@@ -1,0 +1,18 @@
+# Define the date when chests can be opened to get gifts
+date: '25/12/2019 00:00:00'
+# Date format
+dateFormat: 'dd MMMM yyyy'
+
+# Messages
+notTime: '&cIt''s not time yet! You need to wait until &l%date%'
+linkChest: '&cChest successfully linked!'
+unlinkChest: '&cChest successfully unlinked!'
+noGift: '&cYou don''t have new gifts!'
+playerNotFound: '&cPlayer %player% doesn''t exist!'
+noItem: '&cYou must have an item in your hand.'
+sendGift: '&6You have sent a gift to %player%'
+receiveGift: '&6You receive a new gift from %player%'
+modifyMode: '&c&lLeft-click &con the chest that you want add or remove from gift chests.'
+itemLore:
+- '%lores%'
+- 'Send by %player%'
