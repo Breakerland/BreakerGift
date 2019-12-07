@@ -16,6 +16,6 @@ receiveGift: '%prefix% &6You receive a new gift from %player%'
 modifyMode: '%prefix% &cClick on the chest that you want add or remove from gift chests.'
 receiveGiveall: '%prefix% &6You receive a new gift from the server staff!'
 giveall: '%prefix% &6You have sent a new gift to all players'
-itemLore:
+itemLores:
 - '%lores%'
 - 'Send by %player%'

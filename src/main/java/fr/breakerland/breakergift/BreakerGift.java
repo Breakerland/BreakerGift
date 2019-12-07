@@ -120,7 +120,7 @@ public class BreakerGift extends JavaPlugin {
 	public void formatItem(ItemStack item, String sender) {
 		ItemMeta meta = item.getItemMeta();
 		List<String> lores = new ArrayList<>();
-		List<String> newLores = getConfig().getStringList("lores");
+		List<String> newLores = getConfig().getStringList("itemLores");
 		for (String lore : newLores)
 			if (lore.equalsIgnoreCase("%lores%"))
 				lores.addAll(meta.getLore());
