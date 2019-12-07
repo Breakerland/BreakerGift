@@ -28,7 +28,7 @@ public class GiftCommand implements CommandExecutor {
 			return false;
 
 		Player player = (Player) sender;
-		OfflinePlayer receiver = Bukkit.getPlayer(args[0]);
+		OfflinePlayer receiver = Bukkit.getOfflinePlayer(args[0]);
 		if (receiver == null)
 			player.sendMessage(plugin.getMessage("playerNotFound", "%prefix% &cPlayer %player% doesn't exist!").replaceFirst("%player%", args[0]));
 		else {

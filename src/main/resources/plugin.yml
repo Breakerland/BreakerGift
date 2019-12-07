@@ -11,7 +11,7 @@ commands:
     usage: |
            §6=====================§c GIFT §6======================
            §7/<command> [player] : §eOffer a christmas gift to another player!
-           §6=================================================
+           §6================================================
     description: send a gift !
     permission: gift.command.gift
     aliases: present
@@ -20,7 +20,7 @@ commands:
            §6===================§c GIFT ADMIN §6===================
            §7/<command> modify : §eLeft click on a chest to add or remove it from christmas chests
            §7/<command> giveall : §eOffer a christmas gift to all online players
-           §6=================================================
+           §6================================================
     description: admin this gift
     permission: gift.command.giftadmin
 
