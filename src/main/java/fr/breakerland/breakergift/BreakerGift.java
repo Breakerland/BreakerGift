@@ -60,7 +60,7 @@ public class BreakerGift extends JavaPlugin {
 	@Override
 	public void onDisable() {
 		data.set("chests", chests);
-		gifts.forEach((k, v) -> data.set("players." + k.toString(), v));
+		gifts.forEach((k, v) -> data.set("players." + k.toString(), v.isEmpty() ? v : "none"));
 
 		saveData();
 	}
@@ -161,7 +161,7 @@ public class BreakerGift extends JavaPlugin {
 		if (playerSection != null)
 			for (String id : playerSection.getKeys(false))
 				try {
-					gifts.put(id, (List<ItemStack>) playerSection.getList(id));
+					gifts.put(id, playerSection.isList(id) ? (List<ItemStack>) playerSection.getList(id) : new ArrayList<>());
 				} catch (IllegalArgumentException e) {}
 
 		// LOAD CHEST DATAS

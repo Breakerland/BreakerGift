@@ -1,7 +1,6 @@
 package fr.breakerland.breakergift.listener;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
@@ -89,8 +88,8 @@ public class InteractListener implements Listener {
 		if (event.getClickedInventory().getType() == InventoryType.PLAYER && action == InventoryAction.MOVE_TO_OTHER_INVENTORY || (event.getClickedInventory().getType() == InventoryType.CHEST || event.getClickedInventory().getType() == InventoryType.ENDER_CHEST) && (event.getAction() == InventoryAction.PLACE_ALL || event.getAction() == InventoryAction.PLACE_SOME || event.getAction() == InventoryAction.PLACE_ONE))
 			event.setCancelled(true);
 		else if (event.getClickedInventory().getType() != InventoryType.PLAYER && (action != InventoryAction.PICKUP_ALL || action != InventoryAction.MOVE_TO_OTHER_INVENTORY)) {
-			List<ItemStack> gifts = plugin.gifts.getOrDefault(player.getUniqueId().toString(), new ArrayList<ItemStack>());
-			if (gifts.remove(event.getCurrentItem()))
+			List<ItemStack> gifts = plugin.gifts.get(player.getUniqueId().toString());
+			if (gifts != null && gifts.remove(event.getCurrentItem()))
 				plugin.gifts.put(player.getUniqueId().toString(), gifts);
 		}
 	}
