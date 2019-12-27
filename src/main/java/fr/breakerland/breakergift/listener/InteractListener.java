@@ -51,13 +51,10 @@ public class InteractListener implements Listener {
 		} else if (event.getAction() == Action.RIGHT_CLICK_BLOCK && plugin.chests.contains(block.getLocation())) {
 			if (plugin.isChristmas()) {
 				List<ItemStack> items = plugin.gifts.get(player.getUniqueId().toString());
-				if (items == null) {
-					items = plugin.gifts.get("all");
-					if (items != null)
-						plugin.gifts.put(player.getUniqueId().toString(), items);
-				}
+				if (items == null && (items = plugin.gifts.get("all")) != null)
+					plugin.gifts.put(player.getUniqueId().toString(), items);
 
-				if (items == null || ! (items.size() > 0))
+				if (items == null || items.isEmpty())
 					player.sendMessage(plugin.getMessage("noGift", "%prefix% &cYou don't have new gifts!"));
 				else {
 					Inventory inventory = Bukkit.createInventory(player, Math.min(6, (int) Math.ceil(items.size() / 9D)) * 9, player.getName());
@@ -74,12 +71,12 @@ public class InteractListener implements Listener {
 	}
 
 	@EventHandler(ignoreCancelled = true)
-	public void OnPlayerCloseInventory(InventoryCloseEvent event) {
+	public void onPlayerCloseInventory(InventoryCloseEvent event) {
 		players.remove(event.getPlayer().getUniqueId());
 	}
 
 	@EventHandler(ignoreCancelled = true)
-	public void OnPlayerClickInventory(InventoryClickEvent event) {
+	public void onPlayerClickInventory(InventoryClickEvent event) {
 		Player player = (Player) event.getWhoClicked();
 		if (!players.contains(player.getUniqueId()))
 			return;

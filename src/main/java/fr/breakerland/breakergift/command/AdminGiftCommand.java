@@ -43,12 +43,16 @@ public class AdminGiftCommand implements CommandExecutor, TabCompleter {
 			else {
 				plugin.formatItem(item, "Staff");
 				Map<String, List<ItemStack>> newGifts = new HashMap<>();
-				for (Entry<String, List<ItemStack>> entry : plugin.gifts.entrySet())
-					if (entry.getValue() != null) {
-						List<ItemStack> items = entry.getValue();
-						items.add(item);
-						newGifts.put(entry.getKey(), items);
-					}
+				for (Entry<String, List<ItemStack>> entry : plugin.gifts.entrySet()) {
+					List<ItemStack> items = entry.getValue();
+					items.add(item);
+					newGifts.put(entry.getKey(), items);
+				}
+				if (!newGifts.containsKey("all")) {
+					List<ItemStack> items = new ArrayList<>();
+					items.add(item);
+					newGifts.put("all", items);
+				}
 
 				plugin.gifts = newGifts;
 				player.sendMessage(plugin.getMessage("giveall", "%prefix% &6You have sent a new gift to all players."));

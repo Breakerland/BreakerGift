@@ -13,9 +13,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -60,7 +58,7 @@ public class BreakerGift extends JavaPlugin {
 	@Override
 	public void onDisable() {
 		data.set("chests", chests);
-		gifts.forEach((k, v) -> data.set("players." + k.toString(), v.isEmpty() ? v : "none"));
+		gifts.forEach((k, v) -> data.set("players." + k.toString(), v.isEmpty() || v == null ? "none" : v));
 
 		saveData();
 	}
@@ -89,34 +87,6 @@ public class BreakerGift extends JavaPlugin {
 		}
 	}
 
-	private void convert() {
-		// CONVERT PLAYER DATA
-		Set<String> keysToRemove = new HashSet<>();
-		for (String key : getConfig().getKeys(false)) {
-			String newKey;
-			OfflinePlayer player;
-			if ( (player = Bukkit.getOfflinePlayer(key)) != null)
-				newKey = player.getUniqueId().toString();
-			else if (key.equalsIgnoreCase("all"))
-				newKey = "all";
-			else
-				continue;
-
-			data.set("players." + newKey, getConfig().getList(key));
-			keysToRemove.add(key);
-		}
-
-		// CONVERT PARAM DATA
-		data.set("chests", getConfig().getList("chest_param.chest"));
-		getConfig().set("date", getConfig().getString("chest_param.date"));
-
-		keysToRemove.forEach((k) -> getConfig().set(k, null));
-		getConfig().set("chest_param", null);
-		saveConfig();
-		saveData();
-		getLogger().info("Conversion finished!");
-	}
-
 	public void formatItem(ItemStack item, String sender) {
 		ItemMeta meta = item.getItemMeta();
 		List<String> lores = new ArrayList<>();
@@ -133,12 +103,9 @@ public class BreakerGift extends JavaPlugin {
 	}
 
 	private void loadData() {
-		boolean convert = false;
 		dataFile = new File(getDataFolder(), "data");
 		if (!dataFile.exists())
 			try {
-				convert = true;
-				getLogger().info("Your datas needs to be converted... The conversion will start in few moments.");
 				dataFile.getParentFile().mkdirs();
 				dataFile.createNewFile();
 			} catch (IOException e) {
@@ -152,16 +119,12 @@ public class BreakerGift extends JavaPlugin {
 			e.printStackTrace();
 		}
 
-		// CONVERT FROM OLD DATA STRUCTURE IF NEEDED
-		if (convert)
-			convert();
-
 		// LOAD PLAYER DATAS
 		ConfigurationSection playerSection = data.getConfigurationSection("players");
 		if (playerSection != null)
 			for (String id : playerSection.getKeys(false))
 				try {
-					gifts.put(id, playerSection.isList(id) ? (List<ItemStack>) playerSection.getList(id) : new ArrayList<>());
+					gifts.put(id, (List<ItemStack>) playerSection.getList(id));
 				} catch (IllegalArgumentException e) {}
 
 		// LOAD CHEST DATAS
